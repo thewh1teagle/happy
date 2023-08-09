@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy</title>
+    <style>
+      .hide {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="color" class="i-color" />
+    <button class="btn-scan">scan</button>
+    <button class="btn-connect">connect</button>
+    <button class="btn-off">on</button>
+    <select class="select-devices"></select>
+    <script>
+      let connected = false;
+      let power = false;
+
+      function hexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+          return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+            }
+          : null;
+      }
+      function onClick(target, callback) {
+        target.addEventListener("click", callback);
+      }
+
+      function onEvent(target, callback) {
+        target.addEventListener(event, callback)
+      }
+
+      function selector(query) {
+        return document.querySelector(query);
+      }
+
+      function toggleHide(target) {
+        target.classList.toggle("hide");
+      }
+
+      
+      async function fetchJson(url, method, data) {
+        return await fetch(url, {
+          method,
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      const scanBtn = selector(".btn-scan");
+      const connectBtn = selector(".btn-connect");
+      const powerBtn = selector(".btn-off");
+      const select = selector(".select-devices");
+      const colorBtn = selector(".i-color");
+
+      onEvent('blur', e => fetchJson("/set_rgb", "POST", hexToRgb(e.target.value)))
+
+      onClick(powerBtn, () => {
+        powerBtn.innerText = power ? "on" : "off";
+        fetchJson("/set_power", "POST", { state: power ? false : true });
+        power = power ? false : true;
+      });
+
+      onClick(connectBtn, async () => {
+        if (connected) {
+          alert('disconnect')
+          await fetchJson("/disconnect", "POST");
+          connected = false;
+          connectBtn.innerText = "connect";
+          toggleHide(scanBtn);          
+        } else {
+          alert('connect')
+          await fetchJson("/connect", "POST", { address: select.value });
+          connected = true;
+          connectBtn.innerText = "disconnect";
+          toggleHide(scanBtn);
+        }
+      });
+
+      onClick(scanBtn, async () => {
+        alert("scanning...");
+        const res = await fetch("/scan");
+        const devices = await res.json();
+        for (const dev of devices) {
+          const option = document.createElement("option");
+          option.value = dev.address;
+          option.innerText = dev.name;
+          select.appendChild(option);
+        }
+      });
+    </script>
+  </body>
+</html>
