@@ -16,3 +16,11 @@ python app.py
 
 It will open simple web inerface
 `scan`, `connect`, and then you will be able to control the `LED`
+
+
+# build
+```shell
+
+cd ui && npm i && npm run build
+cd app && pyinstaller --onefile --windowed --add-data "static;.\static" --icon=../assets/logo.png app.py
+```

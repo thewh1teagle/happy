@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Mode(Enum):
     NORMAL = 36
     PULSATING_RAINBOW = 37
