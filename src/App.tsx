@@ -42,15 +42,14 @@ function App() {
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    async function loadModes() {
+    async function initApp() {
+      setTimeout(async () => await invoke('show_main_window'), 100) // wait for render and prevent white screen
       const modes = await invoke('get_modes')
-      console.log(modes)
       setModes(modes)
       // const res = await api.get("/modes");
       // setModes(res.data);
     }
-    loadModes();
-    invoke('show_main_window')
+    initApp();
   }, []);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ function App() {
   async function scan() {
     setScanning(true);
     const devices: any = await invoke('scan', {})
-    console.log(devices)
     setDevices(devices)
     setSelectedDev(devices?.[0].address)
     setScanning(false);
@@ -98,7 +96,6 @@ function App() {
     setPower(state);
   }
 
-  console.log(devices);
 
   return (
     <div className="w-full h-full">
@@ -182,7 +179,6 @@ function App() {
               <span className="">Set Mode</span>
               <select
                 onChange={async (e) => {
-                  console.log('setting mode => ', e.target.value)
                   await invoke('set_mode', {mode: Number(e.target.value)})
                   // await api.post("/set_mode", {
                   //   value: Number(e.target.value),

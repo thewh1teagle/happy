@@ -88,7 +88,6 @@ function App() {
     setPower(state);
   }
 
-  console.log(devices);
 
   return (
     <div className="w-full h-full">
