@@ -2,7 +2,8 @@ import axios from "axios";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 
-const api = axios.create({ baseURL: "http://127.0.0.1:8573" });
+
+const api = axios.create({ baseURL: import.meta.env.DEV ? "http://127.0.0.1:8573" : '' });
 
 function cx(...cns: (boolean | string | undefined)[]): string {
   return cns.filter(Boolean).join(" ");
