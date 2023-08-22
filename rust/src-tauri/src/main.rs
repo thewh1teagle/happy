@@ -16,8 +16,10 @@ struct Controller(Mutex<controller::Controller>);
 async fn scan(scanner: State<'_, Scanner>) -> Result<Vec<serde_json::Value>, String> {
     let scanner = &scanner.0;
     let scanner = scanner.lock().await;
-    let devices = scanner.scan().await;
-    Ok(devices)
+    match scanner.scan().await {
+        Ok(devices) => Ok(devices), // Return the list of devices if scanning succeeds
+        Err(err) => Err(err.to_string()), // Convert the error to a String and return it
+    }
 }
 
 #[tauri::command]

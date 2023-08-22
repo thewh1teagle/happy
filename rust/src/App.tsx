@@ -71,10 +71,17 @@ function App() {
 
   async function scan() {
     setScanning(true);
-    const devices: any = await invoke('scan', {})
-    setDevices(devices)
-    setSelectedDev(devices?.[0].address)
-    setScanning(false);
+    try {
+      const devices: any = await invoke('scan', {})
+      setDevices(devices)
+      setSelectedDev(devices?.[0].address)
+    } catch {
+      alert('Cannot scan. check if Bluetooth turned on')
+    }
+    finally {
+      setScanning(false);
+    }
+    
   }
 
   async function connect() {
