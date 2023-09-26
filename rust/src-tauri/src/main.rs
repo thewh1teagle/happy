@@ -25,6 +25,7 @@ async fn scan(scanner: State<'_, Scanner>) -> Result<Vec<serde_json::Value>, Str
 #[tauri::command]
 async fn show_main_window(window: tauri::Window) {
     window.set_decorations(true).unwrap();
+    window.maximize().unwrap();
     window.show().unwrap();
 }
 

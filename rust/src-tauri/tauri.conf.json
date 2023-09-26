@@ -42,8 +42,6 @@
       {
         "decorations": false,
         "visible": false,
-        "hiddenTitle": true,
-        "maximized": true,
         "fullscreen": false,
         "resizable": true,
         "title": "happy",
