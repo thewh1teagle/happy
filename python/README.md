@@ -5,8 +5,10 @@ Control [Happylight](https://play.google.com/store/apps/details?id=com.xiaoyu.hl
 
 # Setup
 ```shell
-git clone https://github.com/thewh1teagle/happy && cd happy
+git clone https://github.com/thewh1teagle/happy
 pip install -r requirements.txt
+# in ui directory
+npm install && npm run build
 ```
 
 # Usage
