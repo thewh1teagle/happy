@@ -40,6 +40,7 @@ function App() {
   const [power, setPower] = useState(false);
   const [selectedDev, setSelectedDev] = useState<any>({});
   const [color, setColor] = useState("");
+  const [syncRun, setSyncRun] = useState(false)
 
   useEffect(() => {
     async function initApp() {
@@ -82,6 +83,12 @@ function App() {
       setScanning(false);
     }
     
+  }
+
+
+  async function toggleScreenSync() {
+    invoke('toggle_screen_sync')
+    setSyncRun(!syncRun)
   }
 
   async function connect() {
@@ -202,6 +209,15 @@ function App() {
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="mt-8 text-start flex flex-col">
+              <span className="">Screen Sync</span>
+              <button
+                className={cx("btn btn-primary")}
+                onClick={toggleScreenSync}
+              >
+                {syncRun ? 'Stop' : 'Start'} Screen Sync
+              </button>
             </div>
           </>
         )}
