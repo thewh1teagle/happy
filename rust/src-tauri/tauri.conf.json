@@ -41,7 +41,7 @@
     "windows": [
       {
         "decorations": false,
-        "visible": false,
+        "visible": true,
         "fullscreen": false,
         "resizable": true,
         "title": "happy",
