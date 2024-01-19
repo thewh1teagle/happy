@@ -12,6 +12,8 @@ use tauri::State;
 mod controller;
 mod scanner;
 mod screen_sync;
+use env_logger;
+use log::debug;
 
 struct ScannerState(tauri::async_runtime::Mutex<scanner::Scanner>);
 struct Controller(tauri::async_runtime::Mutex<controller::Controller>);
@@ -108,6 +110,8 @@ async fn toggle_screen_sync(app: tauri::AppHandle, controller: State<'_, Control
 
 #[tokio::main]
 async fn main() {
+    env_logger::init();
+    debug!("App started");
     let sync_cancel_token: AtomicBool = AtomicBool::new(false);
     let scanner = scanner::Scanner::new().await;
     let controller = controller::Controller::new();
