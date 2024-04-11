@@ -51,6 +51,7 @@ jobs:
 
       - name: install frontend dependencies
         run: npm install
+        working-directory: ./rust
 
       - uses: tauri-apps/tauri-action@v0
         env:
