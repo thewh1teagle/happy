@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // @ts-ignore
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import _ from "lodash";
 import { useEffect, useState } from "react";
@@ -75,7 +75,7 @@ function App() {
     try {
       const devices: any = await invoke('scan', {})
       setDevices(devices)
-      setSelectedDev(devices?.[0].address)
+      setSelectedDev(devices?.[0].id)
     } catch {
       alert('Cannot scan. check if Bluetooth turned on')
     }
@@ -93,7 +93,7 @@ function App() {
 
   async function connect() {
     setConnecting(true);
-    await invoke('connect', {address: selectedDev})
+    await invoke('connect', {id: selectedDev})
     // await api.post("/connect", { address: selectedDev });
     setConnected(true);
     setConnecting(false);
@@ -146,7 +146,7 @@ function App() {
             )}
 
             {devices.map((d: any) => (
-              <option key={d.address} value={d.address}>
+              <option key={d.id} value={d.id}>
                 {d.name}
               </option>
             ))}
