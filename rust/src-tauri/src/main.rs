@@ -24,7 +24,6 @@ async fn scan(scanner: State<'_, ScannerState>) -> Result<Vec<serde_json::Value>
     let scanner = &scanner.0;
     let scanner = scanner.lock().await;
     let result = scanner.scan().await;
-    println!("result: {:?}", result);
     match result {
         Ok(devices) => Ok(devices), // Return the list of devices if scanning succeeds
         Err(err) => Err(err.to_string()), // Convert the error to a String and return it
@@ -40,12 +39,9 @@ async fn show_main_window(window: tauri::Window) {
 
 #[tauri::command(async)]
 async fn connect(id: &str , controller: State<'_, Controller>, scanner: State<'_, ScannerState>) -> Result<i8, String> {
-    println!("connecting {} ", id);
     let scanner = (&scanner.0).lock().await;
     let mut controller = (&controller.0).lock().await;
-    println!("connect ");
     let peripheral = scanner.connect(id).await.unwrap();
-    println!("connect ");
     peripheral.discover_services().await.unwrap();
     let characteristics = peripheral.characteristics();
     controller.set_peripheral(&peripheral);
