@@ -19,7 +19,7 @@ download from [releases](https://github.com/thewh1teagle/happy/releases/latest)
 
 
 
-### build
+### Build
 ```shell
 cargo tauri build
 ```
