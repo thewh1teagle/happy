@@ -21,5 +21,5 @@ download from [releases](https://github.com/thewh1teagle/happy/releases/latest)
 
 ### Build
 ```shell
-cargo tauri build
+npx tauri build
 ```
