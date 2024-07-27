@@ -60,9 +60,9 @@ async fn set_power(state: bool ,controller: State<'_, Controller>) -> Result<i8,
 
 
 #[tauri::command(async)]
-async fn set_rgb(r: u8 , g: u8, b: u8, controller: State<'_, Controller>) -> Result<i8, String> {
+async fn set_rgb(r: u8 , g: u8, b: u8, q: u8, controller: State<'_, Controller>) -> Result<i8, String> {
     let controller = (&controller.0).lock().await;
-    controller.set_rgb(r, g, b).await.unwrap();
+    controller.set_rgb(r, g, b, q).await.unwrap();
     Ok(0)
 }
 
