@@ -39,7 +39,8 @@ function App() {
   const [modes, setModes] = useState<any>({});
   const [power, setPower] = useState(false);
   const [selectedDev, setSelectedDev] = useState<any>({});
-  const [color, setColor] = useState({r: 255, g: 255, b: 255, q: 255});
+  const [color, setColor] = useState("");
+  const [brightness, setBrightness] = useState(0);
   const [syncRun, setSyncRun] = useState(false)
 
   useEffect(() => {
@@ -56,8 +57,11 @@ function App() {
   useEffect(() => {
     const debouncedColorChange = _.debounce(async (newColor: any) => {
       // Make your HTTP request here to change the color
-      await invoke('set_rgb', newColor)
-      // await api.post("/set_rgb", newColor);
+      const data = hexToRgb(newColor);
+      if (data) {
+        await invoke('set_rgb', data)
+        // await api.post("/set_rgb", data);
+      }
     }, 5); // Debounce for 1 second
 
     debouncedColorChange(color);
@@ -66,6 +70,20 @@ function App() {
       debouncedColorChange.cancel();
     };
   }, [color]);
+
+  useEffect(() => {
+    const debouncedBrightnessChange = _.debounce(async (q: any) => {
+      // Make your HTTP request here to change the brightness
+      await invoke('set_white', {q})
+      // await api.post("/set_white", {q});
+    }, 5); // Debounce for 1 second
+
+    debouncedBrightnessChange(brightness);
+
+    return () => {
+      debouncedBrightnessChange.cancel();
+    };
+  }, [brightness]);
 
   async function scan() {
     setScanning(true);
@@ -182,10 +200,7 @@ function App() {
               <span className="">Pick color</span>
               <input
                 type="color"
-                onChange={(e) => {
-                  const data = hexToRgb(e.target.value);
-                  if (data) setColor((prevState) => ({...prevState, ...data}));
-                }}
+                onChange={(e) => setColor(e.target.value)}
                 className="w-full h-[50px] mt-3"
               ></input>
             </div>
@@ -193,7 +208,7 @@ function App() {
               <span className="">Adjust brightness</span>
               <input
                 type="range"
-                onChange={(e) => setColor(prevState => ({...prevState, q: e.target.valueAsNumber}))}
+                onChange={(e) => setBrightness(e.target.valueAsNumber)}
                 className="w-full h-[50px] mt-3"
                 min={0}
                 max={255}

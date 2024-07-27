@@ -77,14 +77,34 @@ impl Controller {
         Ok(())
     }
 
-    pub async fn set_rgb(&self, r: u8, g: u8, b: u8, q: u8) -> Result<(), Box<dyn Error>> {
+    pub async fn set_rgb(&self, r: u8, g: u8, b: u8) -> Result<(), Box<dyn Error>> {
         let args: [u8; 7] = [
             86,
             r,
             g,
             b,
-            q,
+            (10 * 255 / 100) as u8 & 0xFF,
             255 - 15,
+            255 - 85,
+        ];
+        let values: Vec<u8> = args.to_vec();
+
+        self.peripheral
+            .as_ref()
+            .unwrap()
+            .write(&self.char.as_ref().unwrap(), &values, WriteType::WithoutResponse)
+            .await?;
+        Ok(())
+    }
+
+    pub async fn set_white(&self, q: u8) -> Result<(), Box<dyn Error>> {
+        let args: [u8; 7] = [
+            86,
+            0,
+            0,
+            0,
+            q,
+            255 - 240,
             255 - 85,
         ];
         let values: Vec<u8> = args.to_vec();

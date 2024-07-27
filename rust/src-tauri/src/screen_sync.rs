@@ -71,7 +71,7 @@ pub async fn controller_task(sync_state: State<'_, AtomicBool>, controller: Mute
         }
         match rx.try_recv() {
             Ok(data) => {
-                controller.set_rgb(data.0 as u8, data.1 as u8, data.2 as u8, 255).await.unwrap();
+                controller.set_rgb(data.0 as u8, data.1 as u8, data.2 as u8).await.unwrap();
                 
             },
             Err(_) => {},
