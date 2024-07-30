@@ -77,13 +77,13 @@ impl Controller {
         Ok(())
     }
 
-    pub async fn set_rgb(&self, r: u8, g: u8, b: u8, q: u8) -> Result<(), Box<dyn Error>> {
+    pub async fn set_rgb(&self, r: u8, g: u8, b: u8) -> Result<(), Box<dyn Error>> {
         let args: [u8; 7] = [
             86,
             r,
             g,
             b,
-            q,
+            (10 * 255 / 100) as u8 & 0xFF,
             255 - 15,
             255 - 85,
         ];
