@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "rust/src-tauri",
+    "desktop/src-tauri",
 ]
 resolver = "2"
