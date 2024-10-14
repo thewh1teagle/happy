@@ -1,3 +1,0 @@
-bleak
-bottle
-pywebview
