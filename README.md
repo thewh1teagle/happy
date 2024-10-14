@@ -13,6 +13,12 @@ download from [releases](https://github.com/thewh1teagle/happy/releases/latest)
 - Animation modes
 - Screen Sync!
 
+## Platforms
+
+- MacOS
+- Windows
+- Linux (Untested)
+
 ## Screenshots
 ![718shots_so](https://github.com/thewh1teagle/happy/assets/61390950/9c381e67-c12a-48c1-a039-a290a09c5617)
 ![912shots_so](https://github.com/thewh1teagle/happy/assets/61390950/c30ca640-d40f-45b1-ad29-e755f544cb11)

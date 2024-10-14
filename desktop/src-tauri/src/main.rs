@@ -12,8 +12,6 @@ use tauri::State;
 mod controller;
 mod scanner;
 mod screen_sync;
-use env_logger;
-use log::debug;
 
 struct ScannerState(tauri::async_runtime::Mutex<scanner::Scanner>);
 struct Controller(tauri::async_runtime::Mutex<controller::Controller>);
@@ -53,6 +51,7 @@ async fn connect(id: &str , controller: State<'_, Controller>, scanner: State<'_
 
 #[tauri::command(async)]
 async fn set_power(state: bool ,controller: State<'_, Controller>) -> Result<i8, String> {
+    tracing::debug!("set power: {:?}", state);
     let controller = (&controller.0).lock().await;
     controller.set_power(state).await.unwrap();
     Ok(0)
@@ -111,8 +110,8 @@ async fn toggle_screen_sync(app: tauri::AppHandle, controller: State<'_, Control
 
 #[tokio::main]
 async fn main() {
-    env_logger::init();
-    debug!("App started");
+    tracing_subscriber::fmt::init();
+    tracing::debug!("App started");
     let sync_cancel_token: AtomicBool = AtomicBool::new(false);
     let scanner = scanner::Scanner::try_create().await.unwrap();
     let controller = controller::Controller::new();

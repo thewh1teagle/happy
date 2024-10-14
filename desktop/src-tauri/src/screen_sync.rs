@@ -6,7 +6,6 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use tokio::{self, sync::mpsc::{Sender, Receiver}};
 use std::io::ErrorKind::WouldBlock;
 use std::time::Duration;
-use log::debug;
 
 use crate::controller;
 
@@ -39,7 +38,7 @@ pub fn frames_task(sync_state: &AtomicBool, tx: Sender<(f32, f32, f32)>) {
                     total_b += b;
                     total_a += a;
                 }
-                debug!("rgba: {:?}", (total_r, total_g ,total_b ,total_a));
+                tracing::debug!("rgba: {:?}", (total_r, total_g ,total_b ,total_a));
 
                 // Calculate the mean values.
                 let num_pixels = frame.len() as f32 / 4.0;
@@ -48,7 +47,7 @@ pub fn frames_task(sync_state: &AtomicBool, tx: Sender<(f32, f32, f32)>) {
                 let mean_b = total_b / num_pixels;
 
 
-                debug!("tx: {:?}", (mean_r, mean_g, mean_b));
+                tracing::debug!("tx: {:?}", (mean_r, mean_g, mean_b));
                 // windows gives it in wrong order b, r, g
                 tx.blocking_send((mean_b, mean_g, mean_r)).unwrap();
             }
