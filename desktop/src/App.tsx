@@ -11,7 +11,7 @@ function cx(...cns: (boolean | string | undefined)[]): string {
   return cns.filter(Boolean).join(" ");
 }
 
-function hexToRgb(hex: string) {
+function hexToRgb(hex: string, brightness: number) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(
@@ -24,9 +24,9 @@ function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
+        r: Math.round((parseInt(result[1], 16) * brightness) / 100),
+        g: Math.round((parseInt(result[2], 16) * brightness) / 100),
+        b: Math.round((parseInt(result[3], 16) * brightness) / 100),
       }
     : null;
 }
@@ -40,6 +40,7 @@ function App() {
   const [power, setPower] = useState(false);
   const [selectedDev, setSelectedDev] = useState<any>({});
   const [color, setColor] = useState("");
+  const [brightness, setBrightness] = useState(100);
   const [syncRun, setSyncRun] = useState(false)
 
   useEffect(() => {
@@ -54,21 +55,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const debouncedColorChange = _.debounce(async (newColor: any) => {
+    const debouncedColorChange = _.debounce(async (newColor: string, newBrightness: number) => {
       // Make your HTTP request here to change the color
-      const data = hexToRgb(newColor);
+      const data = hexToRgb(newColor, newBrightness);
       if (data) {
         await invoke('set_rgb', data)
         // await api.post("/set_rgb", data);
       }
     }, 5); // Debounce for 1 second
 
-    debouncedColorChange(color);
+    debouncedColorChange(color, brightness);
 
     return () => {
       debouncedColorChange.cancel();
     };
-  }, [color]);
+  }, [brightness, color]);
 
   async function scan() {
     setScanning(true);
@@ -187,6 +188,15 @@ function App() {
                 type="color"
                 onChange={(e) => setColor(e.target.value)}
                 className="w-full h-[50px] mt-3"
+              ></input>
+            </div>
+            <div className="mt-8 text-start">
+              <span className="">Adjust brightness</span>
+              <input
+                type="range"
+                onChange={(e) => setBrightness(e.target.valueAsNumber)}
+                className="w-full h-[50px] mt-3"
+                value={brightness}
               ></input>
             </div>
             <div className="mt-8 text-start">
