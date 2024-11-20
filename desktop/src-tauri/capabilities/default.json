@@ -7,6 +7,6 @@
     "main"
   ],
   "permissions": [
-    "app:default"
+    "core:default"
   ]
 }

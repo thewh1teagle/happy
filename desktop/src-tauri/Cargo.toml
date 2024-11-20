@@ -7,37 +7,33 @@ license = ""
 repository = ""
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [build-dependencies]
-tauri-build = { version = "2.0.0-beta.11", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-beta.14", features = [] }
-tauri-plugin-window-state = "2.0.0-beta.4"
+tauri = { version = "2", features = [] }
+tauri-plugin-window-state = "2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-# btleplug = "0.11.0"
+
+# Bluetooth
 btleplug = { git = "https://github.com/deviceplug/btleplug.git", branch = "master"}
 strum = "0.21"
 strum_macros = "0.21"
-
 enum_primitive = "0.1.1"
 num_enum = "0.7.0"
 rand = "0.8.5"
 tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
 uuid = "1.4.1"
 futures = "0.3.28"
-scrap = "0.5.0"
 tokio-util = "0.7.10"
+
+# Screen
+scrap = "0.5.0"
+
+# Logs
 tracing-subscriber = "0.3.18"
 tracing = "0.1.40"
-
-
-[features]
-# this feature is used for production builds or when `devPath` points to the filesystem
-# DO NOT REMOVE!!
-custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
 strip = true
